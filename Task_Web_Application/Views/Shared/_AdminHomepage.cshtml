@@ -1,0 +1,803 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f7f5f2;
+            --surface: #ffffff;
+            --border: #eeebe7;
+            --text: #1a1a1a;
+            --muted: #9a9a9a;
+            --accent: #8a7560;
+            --accent-soft: rgba(138,117,96,0.08);
+            --danger: #c0614a;
+            --shadow: 0 2px 16px rgba(0,0,0,0.06);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 230px;
+            min-height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 28px 0 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 0 20px 28px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+            .sidebar-brand h5 {
+                font-family: 'DM Serif Display', serif;
+                font-size: 1.2rem;
+                font-weight: 400;
+                color: var(--text);
+                letter-spacing: 0.01em;
+            }
+
+            .sidebar-brand span {
+                font-size: 0.7rem;
+                color: var(--muted);
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+
+        .nav-section-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 16px 20px 6px;
+            opacity: 0.7;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 20px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.83rem;
+            font-weight: 400;
+            border-radius: 0;
+            transition: color 0.2s, background 0.2s;
+            position: relative;
+            margin: 1px 0;
+        }
+
+            .sidebar a i {
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+
+            .sidebar a::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 3px;
+                background: var(--accent);
+                border-radius: 0 2px 2px 0;
+                opacity: 0;
+                transition: opacity 0.2s;
+            }
+
+            .sidebar a:hover {
+                color: var(--text);
+                background: var(--accent-soft);
+            }
+
+            .sidebar a.active {
+                color: var(--accent);
+                background: var(--accent-soft);
+                font-weight: 500;
+            }
+
+                .sidebar a.active::before {
+                    opacity: 1;
+                }
+
+        .sidebar-spacer {
+            flex: 1;
+        }
+
+        .sidebar-logout {
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+            .sidebar-logout a {
+                color: var(--danger) !important;
+            }
+
+                .sidebar-logout a:hover {
+                    background: rgba(192,97,74,0.06) !important;
+                }
+
+        /* ── MAIN ── */
+        .main-wrap {
+            margin-left: 230px;
+            min-height: 100vh;
+            background: var(--bg);
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .topbar-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+            color: var(--text);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: var(--text);
+            width: 200px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+            .search-box::placeholder {
+                color: #c4c0bb;
+            }
+
+            .search-box:focus {
+                border-color: var(--accent);
+                background: var(--surface);
+            }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s, border-color 0.2s;
+            font-size: 1rem;
+        }
+
+            .icon-btn:hover {
+                color: var(--text);
+                border-color: var(--accent);
+            }
+
+        .notif-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 7px;
+            height: 7px;
+            background: var(--danger);
+            border: 2px solid var(--surface);
+            border-radius: 50%;
+        }
+
+        /* Compose btn in topbar */
+        .btn-compose-trigger {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--text);
+            color: #f7f5f2;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+            .btn-compose-trigger:hover {
+                background: #333;
+            }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* ── PAGE CONTENT ── */
+        .content {
+            padding: 32px;
+        }
+
+        /* ── STAT CARDS ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px 22px 18px;
+            position: relative;
+            overflow: hidden;
+            transition: box-shadow 0.25s, transform 0.25s;
+        }
+
+            .stat-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            }
+
+        .stat-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-change {
+            font-size: 0.72rem;
+            margin-top: 8px;
+            color: var(--muted);
+        }
+
+            .stat-change.up {
+                color: #5a9e78;
+            }
+
+            .stat-change.down {
+                color: var(--danger);
+            }
+
+        .stat-icon {
+            position: absolute;
+            bottom: 14px;
+            right: 16px;
+            font-size: 1.8rem;
+            opacity: 0.07;
+            color: var(--text);
+        }
+
+        .stat-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 0 2px 0 0;
+            transition: width 1s ease;
+        }
+
+        /* ── TABLE CARD ── */
+        .table-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+            .table-card-header h6 {
+                font-family: 'DM Serif Display', serif;
+                font-size: 1rem;
+                font-weight: 400;
+                color: var(--text);
+            }
+
+            .table-card-header span {
+                font-size: 0.72rem;
+                color: var(--muted);
+            }
+
+        .table {
+            margin: 0;
+            font-size: 0.83rem;
+        }
+
+            .table thead th {
+                background: var(--bg);
+                border: none;
+                font-size: 0.68rem;
+                font-weight: 500;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--muted);
+                padding: 12px 24px;
+            }
+
+            .table tbody td {
+                padding: 14px 24px;
+                border-color: var(--border);
+                vertical-align: middle;
+                color: var(--text);
+                font-weight: 300;
+            }
+
+            .table tbody tr:hover td {
+                background: var(--bg);
+            }
+
+            .table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+        /* ── COMPOSE WIDGET ── */
+        .compose-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 199;
+        }
+
+            .compose-overlay.open {
+                display: block;
+            }
+
+        .compose-widget {
+            position: fixed;
+            bottom: 28px;
+            right: 32px;
+            width: 520px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.13);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), opacity 0.25s;
+        }
+
+            .compose-widget.open {
+                display: flex;
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .compose-widget.minimised .compose-body,
+            .compose-widget.minimised .compose-footer {
+                display: none;
+            }
+
+            .compose-widget.minimised {
+                width: 260px;
+            }
+
+        .compose-header {
+            background: var(--text);
+            color: #f7f5f2;
+            padding: 11px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .compose-header-title {
+            font-size: 0.82rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+        }
+
+        .compose-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .compose-header-actions button {
+                background: none;
+                border: none;
+                color: rgba(255,255,255,0.7);
+                cursor: pointer;
+                padding: 2px 4px;
+                font-size: 0.95rem;
+                line-height: 1;
+                transition: color 0.15s;
+                display: flex;
+                align-items: center;
+            }
+
+                .compose-header-actions button:hover {
+                    color: #fff;
+                }
+
+        .compose-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .compose-field {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+        }
+
+            .compose-field label {
+                font-size: 0.75rem;
+                color: var(--muted);
+                width: 36px;
+                flex-shrink: 0;
+                font-weight: 400;
+                letter-spacing: 0.02em;
+            }
+
+            .compose-field input {
+                flex: 1;
+                border: none;
+                outline: none;
+                padding: 11px 8px;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.83rem;
+                font-weight: 300;
+                color: var(--text);
+                background: transparent;
+            }
+
+                .compose-field input::placeholder {
+                    color: #c4c0bb;
+                }
+
+        .compose-textarea {
+            border: none;
+            outline: none;
+            resize: none;
+            padding: 14px 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.83rem;
+            font-weight: 300;
+            color: var(--text);
+            background: transparent;
+            min-height: 200px;
+            line-height: 1.7;
+        }
+
+            .compose-textarea::placeholder {
+                color: #c4c0bb;
+            }
+
+        .compose-footer {
+            border-top: 1px solid var(--border);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg);
+        }
+
+        .compose-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .compose-date-field {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 12px;
+        }
+
+            .compose-date-field label {
+                font-size: 0.7rem;
+                color: var(--muted);
+                font-weight: 400;
+                white-space: nowrap;
+                margin: 0;
+            }
+
+            .compose-date-field input[type="date"] {
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                padding: 5px 8px;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 300;
+                color: var(--text);
+                background: var(--surface);
+                outline: none;
+                transition: border-color 0.2s;
+            }
+
+                .compose-date-field input[type="date"]:focus {
+                    border-color: var(--accent);
+                }
+
+        .compose-tool-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: background 0.15s, color 0.15s;
+        }
+
+            .compose-tool-btn:hover {
+                background: var(--border);
+                color: var(--text);
+            }
+
+        .btn-send {
+            background: var(--text);
+            color: #f7f5f2;
+            border: none;
+            border-radius: 7px;
+            padding: 8px 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+            .btn-send:hover {
+                background: #333;
+            }
+        /* === Clear History Button === */
+        .btn-clear-history {
+            background: rgba(192, 97, 74, 0.08);
+            color: #c0614a;
+            border: 1px solid rgba(192, 97, 74, 0.25);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            transition: all 0.25s ease;
+        }
+
+            .btn-clear-history:hover {
+                background: #c0614a;
+                color: #fff;
+                border-color: #c0614a;
+                transform: translateY(-1px);
+                box-shadow: 0 6px 18px rgba(192,97,74,0.25);
+            }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #ccc;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <h5>Task Admin</h5>
+            <span>Management</span>
+        </div>
+
+        <a asp-controller="Data" asp-action="AdminHomepage"
+           class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "AdminHomepage" ? "active" : "")">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a asp-controller="Data" asp-action="CompletedTasks"
+           class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "CompletedTasks" ? "active" : "")">
+            <i class="bi bi-check-circle"></i>
+            <span>Completed</span>
+        </a>
+
+        <a asp-controller="Data" asp-action="History"
+           class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "History" ? "active" : "")">
+            <i class="bi bi-clock-history"></i>
+            <span>History</span>
+        </a>
+
+        <div class="sidebar-spacer"></div>
+
+        <div class="sidebar-logout">
+            <a asp-controller="Data" asp-action="Logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main-wrap">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="topbar-title">
+                @ViewData["Title"]
+            </div>
+
+            <div class="topbar-right">
+                <button class="btn-compose-trigger" onclick="openCompose()">
+                    <i class="bi bi-plus-lg"></i>
+                    New Task
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+
+            <!-- Stat Cards -->
+            
+            <!-- Table -->
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h6>Recent Activity</h6>
+                    <span>Showing latest records</span>
+                </div>
+                <div class="table-responsive">
+                    @RenderBody()
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== COMPOSE WIDGET ===== -->
+    @await Html.PartialAsync("_ComposeWidget", new Task_Web_Application.Models.TaskModel())
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const widget  = document.getElementById('composeWidget');
+        const overlay = document.getElementById('composeOverlay');
+        let expanded = false;
+
+        function openCompose() {
+            widget.classList.add('open');
+            widget.classList.remove('minimised');
+            overlay.classList.add('open');
+        }
+
+        function closeCompose() {
+            widget.classList.remove('open');
+            overlay.classList.remove('open');
+            if (expanded) toggleExpand();
+        }
+
+        function toggleMinimise() {
+            widget.classList.toggle('minimised');
+        }
+
+        function toggleExpand() {
+            expanded = !expanded;
+            if (expanded) {
+                widget.style.width  = '700px';
+                widget.style.bottom = '0';
+                widget.style.right  = '0';
+                widget.style.borderRadius = '14px 14px 0 0';
+                widget.querySelector('.compose-textarea').style.minHeight = '380px';
+            } else {
+                widget.style.width  = '520px';
+                widget.style.bottom = '28px';
+                widget.style.right  = '32px';
+                widget.style.borderRadius = '14px';
+                widget.querySelector('.compose-textarea').style.minHeight = '200px';
+            }
+        }
+    </script>
+
+</body>
+</html>

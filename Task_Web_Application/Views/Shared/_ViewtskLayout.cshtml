@@ -1,0 +1,204 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f7f5f2;
+            --surface: #ffffff;
+            --border: #eeebe7;
+            --text: #1a1a1a;
+            --muted: #9a9a9a;
+            --accent: #8a7560;
+            --accent-soft: rgba(138,117,96,0.08);
+            --danger: #c0614a;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-weight: 300;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 230px;
+            min-height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            padding: 28px 0;
+        }
+
+        .sidebar-brand {
+            padding: 0 20px 24px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 14px;
+        }
+
+            .sidebar-brand h5 {
+                font-family: 'DM Serif Display', serif;
+                font-weight: 400;
+            }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 20px;
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 0.83rem;
+            transition: 0.2s;
+        }
+
+            .sidebar a:hover,
+            .sidebar a.active {
+                background: var(--accent-soft);
+                color: var(--accent);
+            }
+
+        .main-wrap {
+            margin-left: 230px;
+        }
+
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.75rem;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        /* ✨ CLEAN GLASS TABLE CARD ✨ */
+        .table-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+            overflow: hidden;
+            backdrop-filter: blur(6px);
+        }
+
+        .table-card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .table-card-header h6 {
+                font-family: 'DM Serif Display', serif;
+                font-weight: 400;
+                margin: 0;
+            }
+
+        .table {
+            margin: 0;
+            font-size: 0.83rem;
+        }
+
+            .table thead th {
+                background: var(--bg);
+                border: none;
+                font-size: 0.68rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--muted);
+                padding: 14px 24px;
+            }
+
+            .table tbody td {
+                padding: 16px 24px;
+                border-color: var(--border);
+            }
+
+            .table tbody tr:hover td {
+                background: var(--bg);
+            }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <h5>User Panel</h5>
+        </div>
+
+        <a href="#" class="active">
+            <i class="bi bi-grid-1x2"></i> Dashboard
+        </a>
+
+        <a asp-controller="Data" asp-action="ViewTask">
+            <i class="bi bi-list-task"></i> View Tasks
+        </a>
+
+        <a href="@Url.Action("Login", "Data")">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </nav>
+
+    <div class="main-wrap">
+
+        <div class="topbar">
+            <div class="topbar-title">User Dashboard</div>
+            <div class="avatar">
+                @ViewBag.Username?.Substring(0, 1)
+            </div>
+        </div>
+
+
+        <div class="content">
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h6>My Tasks</h6>
+                    <span class="text-muted small">Latest Records</span>
+                </div>
+
+                <div class="table-responsive">
+                    @RenderBody()
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

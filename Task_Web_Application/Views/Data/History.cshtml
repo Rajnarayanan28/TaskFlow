@@ -1,0 +1,70 @@
+﻿@model IEnumerable<Task_Web_Application.Models.TaskHistory>
+
+@{
+    ViewData["Title"] = "History";
+    Layout = "~/Views/Shared/_AdminHomepage.cshtml";
+}
+
+
+<div class="table-card">
+    <div class="table-card-header d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Task History</h6>
+
+        <form asp-action="ClearHistory" method="post">
+            <button class="btn-clear-history"
+                    onclick="return confirm('This will permanently delete all history. Continue?')">
+                <i class="bi bi-trash3 me-2"></i>
+                Clear History
+            </button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle">
+        </table>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Subject</th>
+                <th>Task</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Archived On</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.From</td>
+                        <td>@item.To</td>
+                        <td>@item.Sub</td>
+                        <td>@item.Task</td>
+                        <td>@item.Start?.ToString("dd MMM yyyy")</td>
+                        <td>@item.End?.ToString("dd MMM yyyy")</td>
+                        <td>@item.ArchivedOn.ToString("dd MMM yyyy HH:mm")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">
+                        No history yet.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

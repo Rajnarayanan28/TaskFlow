@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Task_Web_Application.Models.TaskModel>
+
+@{
+    ViewData["Title"] = "My Tasks";
+    Layout = "~/Views/Shared/_UserHomepage.cshtml";
+}
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>From</th>
+            <th>To</th>
+
+            <th>Subject</th>
+            <th>Task</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.From</td>
+
+                    <td>@item.To</td>
+                    <td>@item.Sub</td>
+                    <td class="task-cell">
+                        @item.Task
+                    </td>
+                    <td>@item.Start.ToString("dd MMM yyyy")</td>
+                    <td>@item.End.ToString("dd MMM yyyy")</td>
+
+                    <!-- STATUS BADGE -->
+                    <td>
+                        <span class="badge @(item.Status ? "bg-success" : "bg-warning text-dark")">
+                            @(item.Status ? "Completed" : "Pending")
+                        </span>
+                    </td>
+
+                    <!-- TOGGLE BUTTON -->
+                    <td>
+                        <form asp-controller="Data"
+                              asp-action="UpdateStatus"
+                              method="post"
+                              style="display:inline;">
+                            <input type="hidden" name="id" value="@item.ID" />
+
+                            <button type="submit"
+                                    class="btn btn-sm @(item.Status ? "btn-outline-secondary" : "btn-success")">
+                                @(item.Status ? "Undo" : "Mark Completed")
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="text-center text-muted py-4">
+                    No tasks assigned yet.
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,211 @@
+﻿@using Task_Web_Application.Models
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f7f5f2;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            color: #2c2c2c;
+        }
+
+        .card-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            padding: 48px 44px;
+            border-radius: 16px;
+            box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+        }
+
+        .card-header {
+            margin-bottom: 32px;
+        }
+
+            .card-header h1 {
+                font-family: 'DM Serif Display', serif;
+                font-size: 1.9rem;
+                font-weight: 400;
+                color: #1a1a1a;
+                margin-bottom: 6px;
+            }
+
+            .card-header p {
+                font-size: 0.85rem;
+                color: #9a9a9a;
+            }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: #6b6b6b;
+            margin-bottom: 7px;
+            letter-spacing: 0.01em;
+        }
+
+        input {
+            width: 100%;
+            background: #f7f5f2;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 11px 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 300;
+            color: #2c2c2c;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+            input::placeholder {
+                color: #c4c0bb;
+            }
+
+            input:focus {
+                background: #ffffff;
+                border-color: #c8b89a;
+            }
+
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -12px;
+            margin-bottom: 20px;
+        }
+
+            .forgot-row a {
+                font-size: 0.75rem;
+                color: #8a7560;
+                text-decoration: none;
+            }
+
+                .forgot-row a:hover {
+                    text-decoration: underline;
+                }
+
+        .divider {
+            height: 1px;
+            background: #eeebe7;
+            margin: 28px 0;
+        }
+
+        .btn {
+            width: 100%;
+            background: #2c2c2c;
+            color: #f7f5f2;
+            border: none;
+            border-radius: 8px;
+            padding: 13px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+            .btn:hover {
+                background: #444;
+            }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #b0aba4;
+        }
+
+            .footer-text a {
+                color: #8a7560;
+                text-decoration: none;
+            }
+
+                .footer-text a:hover {
+                    text-decoration: underline;
+                }
+
+        .text-danger {
+            font-size: 0.75rem;
+            color: #c0614a;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-wrapper">
+        <div class="card">
+
+            <div class="card-header">
+                <h1>Welcome back</h1>
+                <p>Sign in to your account to continue</p>
+            </div>
+
+            <form method="post">
+
+                <div class="field">
+                    <label>Email Address</label>
+                    <input type="text" placeholder="john@mail.com" asp-for="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" placeholder="Your password" asp-for="Password">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="forgot-row">
+                    <a href="#">Forgot password?</a>
+                </div>
+
+                <div class="divider"></div>
+
+                <input type="submit" class="btn" value="Sign In" name="submit">
+
+            </form>
+
+            <p class="footer-text">
+                Don't have an account? <a asp-controller="data" asp-action="Register">Sign up</a>
+            </p>
+
+        </div>
+    </div>
+
+</body>
+</html>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

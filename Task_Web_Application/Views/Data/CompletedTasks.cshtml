@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Task_Web_Application.Models.TaskModel>
+
+@{
+    ViewData["Title"] = "Completed Tasks";
+    Layout = "~/Views/Shared/_AdminHomepage.cshtml";
+}
+
+
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Subject</th>
+                <th>Task</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Status</th>
+                <th>Approve</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ID</td>
+                        <td>@item.From</td>
+                        <td>@item.To</td>
+                        <td>@item.Sub</td>
+                        <td>@item.Task</td>
+                        <td>@item.Start.ToString("dd MMM yyyy")</td>
+                        <td>@item.End.ToString("dd MMM yyyy")</td>
+
+                        <td>
+                            <span class="badge bg-success">Completed</span>
+                        </td>
+
+                        <!-- ✅ APPROVE BUTTON -->
+                        <td>
+                            <form asp-action="ApproveTask"
+                                  asp-controller="Data"
+                                  method="post"
+                                  style="display:inline;">
+
+                                <input type="hidden" name="id" value="@item.ID" />
+
+                                <button type="submit"
+                                        class="btn btn-sm btn-success">
+                                    Approve
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-4">
+                        No completed tasks yet.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

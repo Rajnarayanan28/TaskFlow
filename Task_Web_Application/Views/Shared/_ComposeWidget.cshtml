@@ -1,0 +1,64 @@
+﻿@model Task_Web_Application.Models.TaskModel
+
+<div class="compose-overlay" id="composeOverlay" onclick="closeCompose()"></div>
+
+<div class="compose-widget" id="composeWidget">
+
+    <!-- Header -->
+    <div class="compose-header" onclick="toggleMinimise()">
+        <span class="compose-header-title">New Message</span>
+        <div class="compose-header-actions" onclick="event.stopPropagation()">
+            <button type="button" onclick="toggleMinimise()"><i class="bi bi-dash-lg"></i></button>
+            <button type="button" onclick="toggleExpand()"><i class="bi bi-arrows-angle-expand"></i></button>
+            <button type="button" onclick="closeCompose()"><i class="bi bi-x-lg"></i></button>
+        </div>
+    </div>
+
+    <form asp-controller="Data" asp-action="AddTask" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="compose-body">
+
+            <!-- To -->
+            <div class="compose-field">
+                <label>To</label>
+                <input asp-for="To" type="text" placeholder="Recipients" />
+            </div>
+
+            <!-- Subject -->
+            <div class="compose-field">
+                <label>Sub</label>
+                <input asp-for="Sub" type="text" placeholder="Subject" />
+            </div>
+
+            <!-- Message -->
+            <textarea asp-for="Task"
+                      class="compose-textarea"
+                      placeholder="Write your message..."></textarea>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="compose-footer">
+
+            <div class="compose-footer-left">
+
+                <div class="compose-date-field">
+                    <label>Start</label>
+                    <input type="date" asp-for="Start" />
+                </div>
+
+                <div class="compose-date-field">
+                    <label>End</label>
+                    <input type="date" asp-for="End" />
+                </div>
+
+            </div>
+
+            <button class="btn-send" type="submit">
+                Send <i class="bi bi-send"></i>
+            </button>
+
+        </div>
+    </form>
+</div>

@@ -1,0 +1,41 @@
+﻿@model Task_Web_Application.Models.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "AdminHomepage";
+    Layout = "~/Views/Shared/_AdminHomepage.cshtml";
+
+}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value">@Model.TotalUsers</div>
+        <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> 12% this month</div>
+        <i class="bi bi-people stat-icon"></i>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:72%; background:#3b82f6;"></div></div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">Total Tasks</div>
+        <div class="stat-value">@Model.TotalTasks</div>
+        <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> 8% this month</div>
+        <i class="bi bi-currency-dollar stat-icon"></i>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:58%; background:#5a9e78;"></div></div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">Completed</div>
+        <div class="stat-value">@Model.CompletedTasks</div>
+        <div class="stat-change down"><i class="bi bi-arrow-down-short"></i> 3% this month</div>
+        <i class="bi bi-cart-check stat-icon"></i>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:44%; background:#e9a84c;"></div></div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">Pending</div>
+        <div class="stat-value">@Model.PendingTasks</div>
+        <div class="stat-change up"><i class="bi bi-arrow-up-short"></i> 2 new today</div>
+        <i class="bi bi-clock-history stat-icon"></i>
+        <div class="stat-bar"><div class="stat-bar-fill" style="width:20%; background:#c0614a;"></div></div>
+    </div>
+</div>
+
