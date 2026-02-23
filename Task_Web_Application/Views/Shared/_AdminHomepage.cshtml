@@ -686,6 +686,7 @@
 <body>
 
     <!-- ===== SIDEBAR ===== -->
+    <!-- ===== SIDEBAR ===== -->
     <nav class="sidebar">
         <div class="sidebar-brand">
             <h5>Task Admin</h5>
@@ -710,6 +711,21 @@
             <span>History</span>
         </a>
 
+        <!-- NEW SECTION -->
+        <!-- ACCOUNT SECTION -->
+        <div class="nav-section-label">Account</div>
+
+        <a asp-controller="Account" asp-action="ChangePassword"
+           class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "ChangePassword" ? "active" : "")">
+            <i class="bi bi-shield-lock"></i>
+            <span>Change Password</span>
+        </a>
+
+        <a asp-controller="Account" asp-action="DeleteAccount"
+           class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "DeleteAccount" ? "active" : "")">
+            <i class="bi bi-trash"></i>
+            <span>Delete Account</span>
+        </a>
         <div class="sidebar-spacer"></div>
 
         <div class="sidebar-logout">
@@ -798,6 +814,7 @@
             }
         }
     </script>
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

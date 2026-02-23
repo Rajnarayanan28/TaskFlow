@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_UserHomepage.cshtml";
 }
 
+@if (TempData["StatusChanged"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["StatusChanged"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <table class="table align-middle">
     <thead>
         <tr>
@@ -45,27 +53,42 @@
                         </span>
                     </td>
 
-                    <!-- TOGGLE BUTTON -->
+                    <!-- TOGGLE BUTTON (only visible to the assignee) -->
                     <td>
-                        <form asp-controller="Data"
-                              asp-action="UpdateStatus"
-                              method="post"
-                              style="display:inline;">
-                            <input type="hidden" name="id" value="@item.ID" />
+                        @{
+                            var currentUser = (ViewBag.Username as string)?.Trim();
+                            var taskOwner = (item.To ?? string.Empty).Trim();
+                            var isOwner = !string.IsNullOrEmpty(currentUser) &&
+                                          string.Equals(currentUser, taskOwner, System.StringComparison.OrdinalIgnoreCase);
+                        }
 
-                            <button type="submit"
-                                    class="btn btn-sm @(item.Status ? "btn-outline-secondary" : "btn-success")">
-                                @(item.Status ? "Undo" : "Mark Completed")
-                            </button>
-                        </form>
+                        @if (isOwner)
+                        {
+                            <form asp-controller="Data"
+                                  asp-action="UpdateStatus"
+                                  method="post"
+                                  style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.ID" />
+
+                                <button type="submit"
+                                        class="btn btn-sm @(item.Status ? "btn-outline-secondary" : "btn-success")">
+                                    @(item.Status ? "Undo" : "Mark Completed")
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted">&mdash;</span>
+                        }
                     </td>
                 </tr>
             }
         }
         else
         {
-            <tr>
-                <td colspan="8" class="text-center text-muted py-4">
+                <tr>
+                <td colspan="9" class="text-center text-muted py-4">
                     No tasks assigned yet.
                 </td>
             </tr>

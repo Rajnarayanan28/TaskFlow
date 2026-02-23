@@ -167,6 +167,9 @@ namespace Task_Web_Application.Controllers
             if (type == null)
                 return RedirectToAction("Login");
 
+            // expose current username to the view so UI can hide/show actions
+            ViewBag.Username = HttpContext.Session.GetString("Username");
+
             if (type == "admin")
             {
                 return View(_db.addTask.ToList());
@@ -189,30 +192,34 @@ namespace Task_Web_Application.Controllers
         // ================= UPDATE STATUS (UNDO SUPPORTED) =================
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult UpdateStatus(int id)
         {
-            string type = HttpContext.Session.GetString("UserType");
+            var username = HttpContext.Session.GetString("Username");
 
-            if (type != "user")
-                return RedirectToAction("Login");
+            if (string.IsNullOrEmpty(username))
+                return RedirectToAction("Login", "Data");
 
             var task = _db.addTask.FirstOrDefault(x => x.ID == id);
+
             if (task == null)
                 return NotFound();
 
-            string username = HttpContext.Session.GetString("Username");
+            // Only allow user to update THEIR OWN task (case-insensitive)
+            var taskOwner = task.To?.Trim() ?? string.Empty;
+            var currentUser = username?.Trim() ?? string.Empty;
 
-            if (task.To != username)
-                return Unauthorized();
+            if (!string.Equals(taskOwner, currentUser, StringComparison.OrdinalIgnoreCase))
+                return RedirectToAction("ViewTask");
 
+            // Toggle status so user can mark completed or undo
             task.Status = !task.Status;
             _db.SaveChanges();
 
+            TempData["StatusChanged"] = $"Task {id} status is now {(task.Status ? "Completed" : "Pending")}.";
+
             return RedirectToAction("ViewTask");
-
-
         }
-
 
         // ================= COMPLETED TASKS (ADMIN - OWN ONLY) =================
 
@@ -307,6 +314,7 @@ namespace Task_Web_Application.Controllers
 
 
         // ================= LOGOUT =================
+
 
         public IActionResult Logout()
         {

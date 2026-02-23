@@ -1,3 +1,25 @@
 ﻿@{
-    Layout = "_Layout";
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var userType = Context.Session.GetString("UserType");
+
+    // Public pages
+    if (action == "Login" || action == "Register")
+    {
+        Layout = "_Layout";
+    }
+    else
+    {
+        if (userType == "admin")
+        {
+            Layout = "_AdminHomepage";
+        }
+        else if (userType == "user")
+        {
+            Layout = "_UserHomepage";
+        }
+        else
+        {
+            Layout = "_Layout";
+        }
+    }
 }
